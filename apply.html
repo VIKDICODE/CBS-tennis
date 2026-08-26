@@ -1,0 +1,1740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CBS Tennis · Apply</title>
+<meta name="description" content="Copenhagen Business School Tennis Club. A small membership built around weekly tennis and a long horizon.">
+
+<!-- Favicons -->
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+<!-- Preload arm images so the first animation is smooth -->
+<link rel="preload" as="image" href="images/datejust-frame2.png">
+<link rel="preload" as="image" href="images/datejust-frame4.png">
+<link rel="preload" as="image" href="images/speedmaster-frame2.png">
+<link rel="preload" as="image" href="images/speedmaster-frame4.png">
+<link rel="preload" as="image" href="images/cartier-frame2.png">
+<link rel="preload" as="image" href="images/cartier-frame4.png">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream: #f0e8d6;
+  --cream-warm: #fbf2dc;
+  --ink: #1a1f1a;
+  --ink-soft: #3a3f3a;
+  --oxblood: #5a2a1f;
+  --oxblood-light: #8a4a3a;
+  --clay: #b8543a;
+  --clay-dark: #8a3a2a;
+  --grass: #2d5a2d;
+  --indoor: #234a5a;
+  --ball: #d4dc52;
+  --ball-edge: #9aa342;
+  
+  --font-serif: 'Cormorant Garamond', 'Garamond', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, sans-serif;
+}
+
+html, body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-serif);
+  overflow-x: hidden;
+}
+
+body { min-height: 100vh; }
+
+.cbs-sans {
+  font-family: var(--font-sans);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+.grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9000;
+  opacity: 0.05;
+  background-image: radial-gradient(var(--ink) 0.5px, transparent 0.5px);
+  background-size: 3px 3px;
+}
+
+/* ---------- Navigation ---------- */
+nav.cbs-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 56px;
+  background: rgba(240, 232, 214, 0.85);
+  border-bottom: 0.5px solid rgba(26, 31, 26, 0.15);
+  transition: padding 0.3s, background 0.3s;
+}
+nav.cbs-nav.scrolled { padding: 16px 56px; }
+
+.cbs-brand { display: flex; align-items: center; gap: 14px; }
+.cbs-brand-mark { width: 36px; height: 36px; flex-shrink: 0; }
+/* By default (Contact), show the blue logo and hide the cream logo */
+.cbs-brand-mark-light { display: none; }
+
+/* On dark-background pages, show cream logo and hide blue logo */
+body.page-home .cbs-brand-mark-default,
+body.page-club .cbs-brand-mark-default,
+body.page-patrons .cbs-brand-mark-default,
+body.page-apply .cbs-brand-mark-default { display: none; }
+
+body.page-home .cbs-brand-mark-light,
+body.page-club .cbs-brand-mark-light,
+body.page-patrons .cbs-brand-mark-light,
+body.page-apply .cbs-brand-mark-light { display: block; }
+.cbs-brand-text-main { font-size: 11px; }
+.cbs-brand-text-sub { font-size: 9px; opacity: 0.55; margin-top: 2px; }
+
+.cbs-nav-links { display: flex; gap: 36px; }
+.cbs-nav-link {
+  position: relative;
+  padding: 4px 0;
+  text-decoration: none;
+  color: var(--ink);
+  font-size: 11px;
+  font-family: var(--font-sans);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.cbs-nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: -4px;
+  width: 0; height: 2px;
+  background: #c9a961;
+  transition: width 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.cbs-nav-link:hover::after, .cbs-nav-link.cbs-hit::after, .cbs-nav-link.is-current::after { width: 100%; }
+.cbs-nav-link.is-current { font-weight: 500; }
+/* On the cream Contact page, gold blends in — keep the oxblood underline */
+body.page-contact .cbs-nav-link::after { background: var(--oxblood); }
+
+/* ---------- Hero (clay) ---------- */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  padding: 140px 56px 80px;
+  background: #3d5d2c;
+  color: var(--cream-warm);
+  overflow: hidden;
+  isolation: isolate;
+}
+.hero::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image:
+    /* Strong vertical mowing stripes — Wimbledon's signature look */
+    repeating-linear-gradient(90deg,
+      rgba(255,255,255,0.06) 0 80px,
+      transparent 80px 160px,
+      rgba(0,0,0,0.10) 160px 240px,
+      transparent 240px 320px),
+    /* Subtle grass texture */
+    radial-gradient(circle at 30% 30%, rgba(0,0,0,0.12) 0.5px, transparent 0.5px),
+    radial-gradient(circle at 70% 60%, rgba(255,255,255,0.06) 0.5px, transparent 0.5px);
+  background-size: 320px 100%, 3px 3px, 4px 4px;
+  z-index: -2;
+}
+.hero::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 40%, transparent 30%, rgba(0,0,0,0.25) 100%);
+  z-index: -1;
+  pointer-events: none;
+}
+.hero-court-lines { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.hero-court-lines line { stroke: var(--cream-warm); stroke-width: 3; opacity: 0.5; }
+
+.hero-content {
+  position: relative;
+  z-index: 5;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: calc(100vh - 220px);
+  padding-left: 4%;
+}
+
+.hero-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.hero-eyebrow::before {
+  content: "";
+  width: 24px; height: 0.5px;
+  background: var(--cream-warm); opacity: 0.5;
+}
+
+h1.hero-headline {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(72px, 11vw, 168px);
+  line-height: 0.86;
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+h1.hero-headline em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--cream-warm);
+}
+
+.hero-meta {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+  margin-top: 64px;
+  flex-wrap: wrap;
+}
+
+.cbs-btn {
+  position: relative;
+  background: var(--cream-warm);
+  color: var(--ink);
+  border: none;
+  padding: 22px 48px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-weight: 500;
+}
+.cbs-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 -2px rgba(0,0,0,0.2);
+}
+.cbs-btn.cbs-hit {
+  animation: btn-thunk 0.45s cubic-bezier(0.36, 0, 0.66, 1);
+}
+@keyframes btn-thunk {
+  0% { transform: scale(1); }
+  20% { transform: scale(0.92) translateY(4px); }
+  55% { transform: scale(1.04) translateY(-2px); }
+  100% { transform: scale(1); }
+}
+
+.hero-stat {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+.hero-stat strong {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 18px;
+  letter-spacing: 0;
+  text-transform: none;
+  font-weight: 500;
+  color: var(--cream-warm);
+}
+
+.hero-aside {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 24px;
+}
+.hero-aside-quote {
+  background: var(--cream-warm);
+  color: var(--ink);
+  padding: 36px 32px 28px;
+  width: 100%;
+  max-width: 380px;
+  position: relative;
+  transform: rotate(2deg);
+  box-shadow: 0 4px 0 -1px rgba(0,0,0,0.15);
+}
+.hero-aside-quote::before {
+  content: "";
+  position: absolute;
+  top: -12px; left: 50%;
+  transform: translateX(-50%) rotate(-3deg);
+  width: 80px; height: 24px;
+  background: rgba(184, 84, 58, 0.4);
+  background-image: repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(184,84,58,0.6) 2px, rgba(184,84,58,0.6) 4px);
+}
+.hero-aside-quote-mark {
+  font-family: var(--font-serif);
+  font-size: 56px;
+  line-height: 0.5;
+  color: var(--oxblood);
+  margin-bottom: 8px;
+  font-style: italic;
+}
+.hero-aside-quote-text {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 22px;
+  line-height: 1.35;
+  color: var(--ink);
+  margin-bottom: 20px;
+}
+.hero-aside-quote-attr {
+  font-family: var(--font-sans);
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  border-top: 0.5px solid rgba(26, 31, 26, 0.25);
+  padding-top: 12px;
+}
+.hero-volume {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  opacity: 0.6;
+  align-self: flex-start;
+  margin-top: 16px;
+}
+
+/* ---------- Stats band ---------- */
+.stats-band {
+  background: var(--cream);
+  padding: 80px 56px;
+  position: relative;
+}
+.stats-band-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 48px;
+  position: relative;
+}
+.stats-band-inner::before, .stats-band-inner::after {
+  content: "";
+  position: absolute;
+  top: 12px; bottom: 12px;
+  width: 0.5px;
+  background: rgba(26, 31, 26, 0.15);
+}
+.stats-band-inner::before { left: 33.33%; }
+.stats-band-inner::after { left: 66.66%; }
+
+.stat-block { position: relative; }
+.stat-num {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 96px;
+  line-height: 0.9;
+  color: var(--oxblood);
+  letter-spacing: -0.03em;
+}
+.stat-num em { font-style: italic; font-weight: 400; }
+.stat-label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  opacity: 0.6;
+  margin-top: 12px;
+}
+.stat-block.cbs-hit .stat-num {
+  animation: stat-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes stat-pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.12); color: var(--clay); }
+  100% { transform: scale(1); }
+}
+
+/* ---------- Home tagline block (medium grass) ---------- */
+.home-tagline {
+  background: #2d4a1f;
+  background-image:
+    repeating-linear-gradient(90deg,
+      rgba(255,255,255,0.04) 0 80px,
+      transparent 80px 160px,
+      rgba(0,0,0,0.08) 160px 240px,
+      transparent 240px 320px),
+    radial-gradient(circle at 30% 30%, rgba(0,0,0,0.10) 0.5px, transparent 0.5px);
+  background-size: 320px 100%, 4px 4px;
+  padding: 100px 56px;
+  position: relative;
+  text-align: center;
+  border-top: 1px solid rgba(251, 242, 220, 0.15);
+}
+.home-tagline-inner {
+  max-width: 720px;
+  margin: 0 auto;
+}
+.home-tagline-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--cream-warm);
+  opacity: 0.6;
+  margin-bottom: 24px;
+}
+.home-tagline-eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 32px;
+  height: 1px;
+  background: var(--cream-warm);
+  vertical-align: middle;
+  margin-right: 14px;
+  opacity: 0.6;
+}
+.home-tagline-text {
+  font-family: var(--font-serif);
+  font-size: clamp(20px, 2.5vw, 28px);
+  line-height: 1.45;
+  color: var(--cream-warm);
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* ---------- Home patrons strip (dark grass) ---------- */
+.home-patrons {
+  background: #1f3614;
+  background-image:
+    radial-gradient(circle at 25% 30%, rgba(255,255,255,0.04) 0.5px, transparent 0.5px),
+    radial-gradient(circle at 65% 75%, rgba(0,0,0,0.15) 0.5px, transparent 0.5px),
+    radial-gradient(circle at 80% 20%, rgba(255,255,255,0.04) 0.5px, transparent 0.5px);
+  background-size: 4px 4px, 5px 5px, 6px 6px;
+  padding: 100px 56px;
+  text-align: center;
+}
+.home-patrons-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.home-patrons-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--cream-warm);
+  opacity: 0.6;
+  margin-bottom: 32px;
+}
+.home-patrons-eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 32px;
+  height: 1px;
+  background: var(--cream-warm);
+  vertical-align: middle;
+  margin-right: 14px;
+  opacity: 0.6;
+}
+.home-patrons-headline {
+  font-family: var(--font-serif);
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1.15;
+  color: var(--cream-warm);
+  font-weight: 400;
+  margin-bottom: 48px;
+}
+.home-patrons-headline em { font-style: italic; font-weight: 500; }
+.industry-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 48px;
+}
+.industry-tag {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--cream-warm);
+  padding: 14px 28px;
+  border: 1px solid rgba(251, 242, 220, 0.4);
+  background: transparent;
+  transition: all 0.3s ease;
+}
+.industry-tag:hover {
+  border-color: var(--cream-warm);
+  background: rgba(251, 242, 220, 0.05);
+}
+.home-patrons-cta {
+  display: inline-block;
+  margin-top: 12px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--cream-warm);
+  text-decoration: none;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--cream-warm);
+}
+.home-patrons-cta:hover { opacity: 0.7; }
+
+/* ---------- Patrons (grass) ---------- */
+.patrons {
+  background: var(--grass);
+  color: var(--cream-warm);
+  padding: 120px 56px;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.patrons::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image:
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 3px),
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.05) 0, rgba(0,0,0,0.05) 1px, transparent 1px, transparent 7px);
+  z-index: -2;
+}
+.patrons::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent 0, transparent 80px, rgba(255,255,255,0.025) 80px, rgba(255,255,255,0.025) 160px);
+  z-index: -1;
+  pointer-events: none;
+}
+.patrons-court-lines { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.patrons-court-lines line { stroke: var(--cream-warm); stroke-width: 2; opacity: 0.7; }
+
+.patrons-inner {
+  position: relative;
+  z-index: 5;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.patrons-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 64px;
+  gap: 48px;
+  flex-wrap: wrap;
+}
+.patrons-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.patrons-eyebrow::before {
+  content: "";
+  width: 24px; height: 0.5px;
+  background: var(--cream-warm); opacity: 0.5;
+}
+
+h2.patrons-headline {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(48px, 6vw, 88px);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  max-width: 720px;
+  margin: 0;
+}
+h2.patrons-headline em { font-style: italic; font-weight: 500; }
+
+.patrons-side {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.5;
+  max-width: 320px;
+  opacity: 0.85;
+}
+
+.patrons-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.patron-card {
+  padding: 40px 20px;
+  border: 1px solid rgba(251, 242, 220, 0.25);
+  background: rgba(251, 242, 220, 0.05);
+  text-align: center;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--cream-warm);
+  transition: background 0.4s ease, border-color 0.4s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  letter-spacing: -0.01em;
+}
+.patron-card:hover {
+  background: rgba(251, 242, 220, 0.12);
+  border-color: rgba(251, 242, 220, 0.45);
+}
+.patron-card.cbs-hit {
+  animation: patron-bounce 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--cream-warm);
+  color: var(--ink);
+  border-color: var(--cream-warm);
+}
+@keyframes patron-bounce {
+  0% { transform: translateY(0) rotate(0); }
+  20% { transform: translateY(-16px) rotate(-2deg); }
+  50% { transform: translateY(0) rotate(1deg); }
+  75% { transform: translateY(-6px) rotate(0); }
+  100% { transform: translateY(0); }
+}
+
+.patrons-footnote {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  opacity: 0.5;
+  text-align: center;
+  margin-top: 32px;
+}
+
+/* ---------- Footer ---------- */
+.footer {
+  background: var(--ink);
+  color: var(--cream);
+  padding: 80px 56px 40px;
+  position: relative;
+}
+.footer-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 64px;
+}
+.footer-brand-text { font-family: var(--font-serif); font-style: italic; font-size: 22px; line-height: 1.4; opacity: 0.9; }
+.footer h3 {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  opacity: 0.6;
+  margin-bottom: 20px;
+}
+.footer-list { list-style: none; }
+.footer-list li { margin-bottom: 10px; }
+.footer-list a {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  color: var(--cream);
+  text-decoration: none;
+  opacity: 0.85;
+}
+.footer-list a:hover { opacity: 1; }
+.footer-bottom {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-top: 24px;
+  border-top: 0.5px solid rgba(240, 232, 214, 0.15);
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+
+/* ---------- Arm catcher (PNG-based, side-entry) ---------- */
+#arm-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 8500;
+  overflow: hidden;
+}
+.arm-image {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  filter: drop-shadow(0 12px 28px rgba(26,31,26,0.2));
+  opacity: 0;
+  /* Width, height, position set entirely by JS via inline styles */
+}
+.arm-image.is-active { opacity: 1; }
+/* Strategic GPU promotion: only active during animation, not at rest */
+.arm-image.is-warming {
+  will-change: opacity, transform, filter, left;
+  transform: translateZ(0);
+}
+
+#cbs-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw; height: 100vh;
+  pointer-events: none;
+  z-index: 8000;
+}
+
+.fade-up {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.loaded .fade-up { opacity: 1; transform: translateY(0); }
+.loaded .fade-up.d1 { transition-delay: 0.15s; }
+.loaded .fade-up.d2 { transition-delay: 0.3s; }
+.loaded .fade-up.d3 { transition-delay: 0.45s; }
+.loaded .fade-up.d4 { transition-delay: 0.6s; }
+
+.in-view { opacity: 0; transform: translateY(32px); transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), transform 1s cubic-bezier(0.4, 0, 0.2, 1); }
+.in-view.is-visible { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 900px) {
+  nav.cbs-nav { padding: 16px 24px; }
+  .cbs-nav-links { gap: 18px; }
+  .cbs-nav-links a { font-size: 10px; }
+  .hero { padding: 120px 24px 60px; }
+  .hero-content { padding-left: 0; }
+  .hero-aside-quote { max-width: 100%; transform: rotate(0); }
+  .stats-band { padding: 60px 24px; }
+  .stats-band-inner { grid-template-columns: 1fr; gap: 32px; }
+  .stats-band-inner::before, .stats-band-inner::after { display: none; }
+  .stat-num { font-size: 64px; }
+  .patrons { padding: 80px 24px; }
+  .patrons-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer { padding: 60px 24px 24px; }
+  .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; gap: 12px; }
+}
+
+/* ---------- Mobile nav toggle (hamburger) ----------
+   Button/icon styles just below are global but invisible on desktop
+   (display:none until the @media query re-enables them) — harmless there.
+   The actual mobile-only LAYOUT lives entirely inside the single
+   @media (max-width: 640px) block further down. That block is the one
+   safe, self-contained place to touch for anything mobile-specific;
+   nothing above 640px reads those rules, so PC layout can't be affected.
+   ---------- */
+.cbs-nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 101;
+}
+.cbs-nav-toggle span {
+  display: block;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+nav.cbs-nav.is-open .cbs-nav-toggle span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+nav.cbs-nav.is-open .cbs-nav-toggle span:nth-child(2) { opacity: 0; }
+nav.cbs-nav.is-open .cbs-nav-toggle span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+@media (max-width: 640px) {
+  .cbs-nav-toggle { display: flex; }
+  .cbs-nav-links {
+    position: fixed;
+    inset: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    background: inherit;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-12px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+  nav.cbs-nav.is-open .cbs-nav-links {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+  .cbs-nav-links a { font-size: 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #cbs-canvas, #arm-layer { display: none; }
+  .fade-up, .in-view { opacity: 1; transform: none; transition: none; }
+}
+
+/* ============================================================ */
+/* PAGE-SPECIFIC BACKGROUNDS                                    */
+/* ============================================================ */
+
+body.page-club {
+  background: var(--oxblood);
+  background-image:
+    radial-gradient(circle at 20% 25%, rgba(255,255,255,0.04) 0.5px, transparent 0.5px),
+    radial-gradient(circle at 60% 70%, rgba(0,0,0,0.18) 0.5px, transparent 0.5px),
+    radial-gradient(circle at 35% 90%, rgba(255,255,255,0.04) 0.5px, transparent 0.5px),
+    radial-gradient(circle at 80% 30%, rgba(0,0,0,0.15) 0.5px, transparent 0.5px);
+  background-size: 5px 5px, 4px 4px, 6px 6px, 7px 7px;
+  color: var(--cream-warm);
+}
+body.page-club .cbs-nav-link { color: var(--cream-warm); }
+body.page-club .cbs-brand-text-main, body.page-club .cbs-brand-text-sub { color: var(--cream-warm); }
+
+/* Club court lines — same tennis court layout as other pages */
+.club-court-pattern {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.club-court-pattern line {
+  stroke: var(--cream-warm);
+  stroke-width: 3;
+  opacity: 0.4;
+}
+
+body.page-patrons {
+  background: #1d3f4c;
+  background-image:
+    /* Granular DecoTurf-like surface texture */
+    radial-gradient(circle at 25% 30%, rgba(255,255,255,0.07) 0.5px, transparent 0.5px),
+    radial-gradient(circle at 65% 75%, rgba(0,0,0,0.18) 0.5px, transparent 0.5px),
+    radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0.5px, transparent 0.5px),
+    radial-gradient(circle at 15% 80%, rgba(0,0,0,0.12) 0.7px, transparent 0.7px);
+  background-size: 3px 3px, 3px 3px, 5px 5px, 7px 7px;
+  color: var(--cream-warm);
+}
+body.page-patrons .cbs-nav-link { color: var(--cream-warm); }
+body.page-patrons .cbs-brand-text-main, body.page-patrons .cbs-brand-text-sub { color: var(--cream-warm); }
+
+/* Indoor court lines on Patrons */
+.patrons-court-pattern {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.patrons-court-pattern line {
+  stroke: var(--cream-warm);
+  stroke-width: 3;
+  opacity: 0.45;
+}
+
+body.page-apply {
+  background: #6b3a7e;
+  background-image:
+    /* Granular indoor acrylic court surface texture */
+    radial-gradient(circle at 25% 30%, rgba(255,255,255,0.07) 0.5px, transparent 0.5px),
+    radial-gradient(circle at 65% 75%, rgba(0,0,0,0.18) 0.5px, transparent 0.5px),
+    radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0.5px, transparent 0.5px),
+    radial-gradient(circle at 15% 80%, rgba(0,0,0,0.12) 0.7px, transparent 0.7px);
+  background-size: 3px 3px, 3px 3px, 5px 5px, 7px 7px;
+  color: var(--cream-warm);
+}
+body.page-apply .cbs-nav-link { color: var(--cream-warm); }
+body.page-apply .cbs-brand-text-main, body.page-apply .cbs-brand-text-sub { color: var(--cream-warm); }
+
+/* Purple court lines on Apply */
+.apply-court-pattern {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.apply-court-pattern line {
+  stroke: var(--cream-warm);
+  stroke-width: 3;
+  opacity: 0.45;
+}
+
+body.page-contact {
+  background: var(--cream);
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(26,31,26,0.10) 0.5px, transparent 0.5px),
+    radial-gradient(circle at 60% 70%, rgba(26,31,26,0.06) 0.5px, transparent 0.5px),
+    radial-gradient(circle at 80% 20%, rgba(26,31,26,0.08) 0.5px, transparent 0.5px);
+  background-size: 4px 4px, 5px 5px, 6px 6px;
+  color: var(--ink);
+}
+
+/* ============================================================ */
+/* PAGE-TINTED NAVIGATION                                       */
+/* Each page gets a nav background that matches its theme,      */
+/* creating a unified atmospheric experience.                   */
+/* ============================================================ */
+
+/* Hjem (gress) — dark green tinted nav */
+body.page-home nav.cbs-nav {
+  background: rgba(20, 35, 14, 0.85);
+  border-bottom: 1px solid rgba(251, 242, 220, 0.10);
+}
+body.page-home .cbs-nav-link { color: var(--cream-warm); }
+body.page-home .cbs-brand-text-main, body.page-home .cbs-brand-text-sub { color: var(--cream-warm); }
+
+/* Club (oxblood) — dark oxblood tinted nav */
+body.page-club nav.cbs-nav {
+  background: rgba(40, 18, 13, 0.85);
+  border-bottom: 1px solid rgba(251, 242, 220, 0.10);
+}
+
+/* Patrons (indoor blue) — dark blue tinted nav */
+body.page-patrons nav.cbs-nav {
+  background: rgba(13, 30, 38, 0.85);
+  border-bottom: 1px solid rgba(251, 242, 220, 0.10);
+}
+
+/* Apply (purple) — dark purple tinted nav */
+body.page-apply nav.cbs-nav {
+  background: rgba(45, 22, 60, 0.85);
+  border-bottom: 1px solid rgba(251, 242, 220, 0.10);
+}
+
+/* Contact (cream) — keep original cream nav */
+/* (no override needed — uses default rgba(240, 232, 214, 0.85)) */
+
+/* Subpage layout — generic page hero/content */
+.page-hero {
+  position: relative;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 140px 24px 80px;
+  text-align: center;
+  z-index: 1;
+}
+.page-hero-inner { max-width: 900px; }
+.page-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: 24px;
+}
+.page-eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 32px;
+  height: 1px;
+  background: currentColor;
+  vertical-align: middle;
+  margin-right: 14px;
+  opacity: 0.6;
+}
+.page-headline {
+  font-family: var(--font-serif);
+  font-size: clamp(48px, 8vw, 96px);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  margin-bottom: 32px;
+}
+.page-headline em { font-style: italic; font-weight: 500; }
+.page-lede {
+  font-family: var(--font-serif);
+  font-size: clamp(18px, 2vw, 22px);
+  line-height: 1.5;
+  font-style: italic;
+  max-width: 600px;
+  margin: 0 auto;
+  opacity: 0.85;
+}
+.page-body-section {
+  position: relative;
+  padding: 80px 24px 120px;
+  z-index: 1;
+}
+.page-body-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.tally-form-frame {
+  border: none;
+  display: block;
+}
+</style>
+</head>
+<body class="page-apply">
+
+<div class="grain"></div>
+
+<nav class="cbs-nav">
+  <a href="index.html" class="cbs-brand" style="text-decoration: none; color: inherit;">
+    <img class="cbs-brand-mark cbs-brand-mark-default" src="images/logo.png" alt="CBS Tennis logo" width="40" height="40">
+    <img class="cbs-brand-mark cbs-brand-mark-light" src="images/logo-cream.png" alt="CBS Tennis logo" width="40" height="40">
+    <div>
+      <div class="cbs-sans cbs-brand-text-main">CBS Tennis</div>
+      <div class="cbs-sans cbs-brand-text-sub">Copenhagen</div>
+    </div>
+  </a>
+  <div class="cbs-nav-links">
+    <a href="index.html" class="cbs-nav-link">Home</a>
+    <a href="club.html" class="cbs-nav-link">Club</a>
+    <a href="patrons.html" class="cbs-nav-link">Patrons</a>
+    <a href="apply.html" class="cbs-nav-link is-current">Apply</a>
+    <a href="contact.html" class="cbs-nav-link">Contact</a>
+  </div>
+  <button class="cbs-nav-toggle" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+
+<svg class="apply-court-pattern" preserveAspectRatio="none" viewBox="0 0 1600 1000">
+  <!-- Tennis court — viewed from above, oriented landscape -->
+  <!-- Outer boundaries (doubles court) -->
+  <line x1="80" y1="120" x2="1520" y2="120"/>
+  <line x1="80" y1="880" x2="1520" y2="880"/>
+  <line x1="80" y1="120" x2="80" y2="880"/>
+  <line x1="1520" y1="120" x2="1520" y2="880"/>
+  <!-- Singles sidelines -->
+  <line x1="80" y1="220" x2="1520" y2="220"/>
+  <line x1="80" y1="780" x2="1520" y2="780"/>
+  <!-- Net (center, thicker) -->
+  <line x1="800" y1="120" x2="800" y2="880" stroke-width="4"/>
+  <!-- Service lines -->
+  <line x1="430" y1="220" x2="430" y2="780"/>
+  <line x1="1170" y1="220" x2="1170" y2="780"/>
+  <!-- Center service line -->
+  <line x1="430" y1="500" x2="1170" y2="500"/>
+  <!-- Center mark on baselines -->
+  <line x1="80" y1="490" x2="100" y2="490"/>
+  <line x1="80" y1="510" x2="100" y2="510"/>
+  <line x1="1500" y1="490" x2="1520" y2="490"/>
+  <line x1="1500" y1="510" x2="1520" y2="510"/>
+</svg>
+
+<main>
+  <section class="page-hero">
+    <div class="page-hero-inner">
+      <div class="page-eyebrow in-view">Membership application</div>
+      <h1 class="page-headline in-view">Apply to join <em>the club.</em></h1>
+      <p class="page-lede in-view">Applications open at the start of each semester. Selection is based on tennis ability, fit with the cohort, and what you bring to the room beyond the court.</p>
+    </div>
+  </section>
+
+  <section class="page-body-section">
+    <div class="page-body-inner" style="max-width: 700px;">
+      <iframe
+        class="tally-form-frame"
+        data-tally-src="https://tally.so/embed/81bxvz?alignLeft=1&hideTitle=1&dynamicHeight=1"
+        loading="lazy"
+        width="100%"
+        height="500"
+        marginheight="0"
+        marginwidth="0"
+        title="CBS Tennis membership application"
+      ></iframe>
+      <script>
+      var d=document,w="https://tally.so/widgets/embed.js",v=function(){
+        "undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach(function(e){e.src=e.dataset.tallySrc});
+      };
+      if("undefined"!=typeof Tally)v();
+      else if(d.querySelector('script[src="'+w+'"]')==null){
+        var s=d.createElement("script");
+        s.src=w;
+        s.onload=v;
+        s.onerror=v;
+        d.body.appendChild(s);
+      }
+      </script>
+    </div>
+  </section>
+</main>
+<script>window.CBS_ARMS_ENABLED = false;</script>
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand-text">CBS Tennis<br>Est. 2023</div>
+    </div>
+    <div>
+      <h3>Club</h3>
+      <ul class="footer-list">
+        <li><a href="club.html" data-cbs-target data-href="club.html">Inside the club</a></li>
+        <li><a href="patrons.html" data-cbs-target data-href="patrons.html">Patrons</a></li>
+        <li><a href="apply.html" data-cbs-target data-href="apply.html">Apply</a></li>
+        <li><a href="contact.html" data-cbs-target data-href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Find us</h3>
+      <ul class="footer-list">
+        <li>Copenhagen Business School</li>
+        <li>Frederiksberg, Denmark</li>
+        <li>Under CBS Sport</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Contact</h3>
+      <ul class="footer-list">
+        <li><a href="mailto:tennis@cbssport.dk" data-cbs-target>tennis@cbssport.dk</a></li>
+        <li><a href="https://instagram.com/cbs_tennis" target="_blank" rel="noopener" data-cbs-target>Instagram</a></li>
+        <li><a href="https://linkedin.com/company/cbs-tennis" target="_blank" rel="noopener" data-cbs-target>LinkedIn</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© CBS Tennis · 2026</div>
+    <div>A quiet tradition</div>
+  </div>
+</footer>
+
+<canvas id="cbs-canvas"></canvas>
+
+<div id="arm-layer">
+  <!-- Arm img elements injected dynamically per ARM_SET below -->
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // Wait for DOM to be fully parsed before initializing.
+  // Without this guard, race conditions can occur where the script tries to
+  // access elements/images that haven't been parsed yet, especially on first
+  // page load with a cold cache. This eliminates the "have to refresh to make
+  // animations work" problem.
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  function init() {
+  const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isMobile = window.matchMedia('(max-width: 900px)').matches;
+
+  // Arms-enabled defaults to true (Home/Club have arms). Subpages can set
+  // window.CBS_ARMS_ENABLED = false BEFORE this script runs to disable.
+  if (typeof window.CBS_ARMS_ENABLED === 'undefined') {
+    window.CBS_ARMS_ENABLED = true;
+  }
+
+  setTimeout(() => document.body.classList.add('loaded'), 80);
+
+  // ---------- Nav scroll state ----------
+  const nav = document.querySelector('nav.cbs-nav');
+  if (nav) {
+    const updateNav = () => {
+      if (window.scrollY > 40) nav.classList.add('scrolled');
+      else nav.classList.remove('scrolled');
+    };
+    window.addEventListener('scroll', updateNav, { passive: true });
+    updateNav();
+  }
+
+  // ---------- Mobile nav toggle (hamburger) ----------
+  // Wiring only — flips a class/attribute, harmless on desktop since the
+  // button is display:none there and can never be clicked. All mobile-only
+  // appearance lives in the CSS @media (max-width: 640px) block, not here.
+  const navToggle = document.querySelector('.cbs-nav-toggle');
+  if (nav && navToggle) {
+    navToggle.addEventListener('click', () => {
+      const isOpen = nav.classList.toggle('is-open');
+      navToggle.setAttribute('aria-expanded', String(isOpen));
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && nav.classList.contains('is-open')) {
+        nav.classList.remove('is-open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  // ---------- Intersection observer ----------
+  if ('IntersectionObserver' in window && !reduced) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+    document.querySelectorAll('.in-view').forEach(el => io.observe(el));
+  } else {
+    document.querySelectorAll('.in-view').forEach(el => el.classList.add('is-visible'));
+  }
+
+  if (reduced || isMobile) return;
+
+  // ---------- Ball physics + arm catcher ----------
+  const canvas = document.getElementById('cbs-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  let W = 0, H = 0;
+
+  function resize() {
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const RADIUS = 17;
+  const GRAVITY_FLY = 0.5;
+
+  // The ball is INVISIBLE by default — it spawns only on click, from a screen edge
+  const ball = {
+    x: 0, y: 0,
+    vx: 0, vy: 0,
+    rot: 0, rotSpeed: 0,
+    visible: false,
+    flying: false,
+    targetX: 0, targetY: 0,
+    flightFrames: 0,
+    maxFlightFrames: 0,
+    targetEl: null
+  };
+
+  const impacts = [];
+  const particles = [];
+
+  function spawnImpact(x, y) {
+    impacts.push({ x, y, r: 8, life: 1 });
+    for (let i = 0; i < 10; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const sp = 2 + Math.random() * 3;
+      particles.push({
+        x, y,
+        vx: Math.cos(a) * sp,
+        vy: Math.sin(a) * sp - 1.5,
+        life: 1,
+        size: 1.5 + Math.random() * 1.8
+      });
+    }
+  }
+
+  function checkTargetHit(x, y) {
+    const el = document.elementFromPoint(x, y);
+    if (!el) return null;
+    return el.closest('[data-cbs-target]');
+  }
+
+  function triggerHit(el) {
+    if (!el) return;
+    el.classList.add('cbs-hit');
+    setTimeout(() => el.classList.remove('cbs-hit'), 700);
+
+    // If the target has a data-href, navigate to it after the hit animation
+    // settles. This lets the ball "knock" the button before navigating.
+    const href = el.getAttribute('data-href');
+    if (href) {
+      setTimeout(() => { window.location.href = href; }, 450);
+    }
+  }
+
+  // ==========================================================================
+  // ARM REGISTRY — add new arms here as they're produced
+  // Each arm: { id, frame2, frame4 } — DOM elements are created automatically.
+  // To temporarily disable an arm, comment out its line.
+  // ==========================================================================
+  // In Patrons mode, replace the tennis arm set with a single briefcase arm.
+  // The patrons-arm.png is used for both f2 (open) and f4 (closed) frames —
+  // visually it's the same image, but the system expects two frames.
+  const ARM_SET = window.CBS_PATRONS_MODE ? [
+    { id: 'patrons-arm', frame2: 'images/patrons-arm.png', frame4: 'images/patrons-arm.png' },
+  ] : [
+    { id: 'datejust',    frame2: 'images/datejust-frame2.png',    frame4: 'images/datejust-frame4.png' },
+    { id: 'speedmaster', frame2: 'images/speedmaster-frame2.png', frame4: 'images/speedmaster-frame4.png' },
+    { id: 'cartier',     frame2: 'images/cartier-frame2.png',     frame4: 'images/cartier-frame4.png' },
+    // { id: 'panerai',     frame2: 'images/panerai-frame2.png',     frame4: 'images/panerai-frame4.png' },
+    // { id: 'casio',       frame2: 'images/casio-frame2.png',       frame4: 'images/casio-frame4.png' },
+  ];
+
+  // Build DOM elements for every arm (all hidden by default; opacity:0)
+  const armLayer = document.getElementById('arm-layer');
+  ARM_SET.forEach(arm => {
+    const f2 = document.createElement('img');
+    f2.className = 'arm-image';
+    f2.id = `arm-${arm.id}-frame2`;
+    f2.src = arm.frame2;
+    f2.alt = '';
+    f2.decoding = 'async';
+    armLayer.appendChild(f2);
+
+    const f4 = document.createElement('img');
+    f4.className = 'arm-image';
+    f4.id = `arm-${arm.id}-frame4`;
+    f4.src = arm.frame4;
+    f4.alt = '';
+    f4.decoding = 'async';
+    armLayer.appendChild(f4);
+
+    arm.f2El = f2;
+    arm.f4El = f4;
+  });
+
+  // Preload all arm images so the first click is smooth.
+  // Block clicks (assetsReady = false) until every image is decoded.
+  let assetsReady = false;
+  const allImageElements = ARM_SET.flatMap(arm => [arm.f2El, arm.f4El]);
+  const decodePromises = allImageElements.map(img => {
+    if (img.complete && img.naturalWidth > 0) {
+      return img.decode().catch(() => {});
+    }
+    return new Promise(resolve => {
+      img.addEventListener('load', () => {
+        img.decode().catch(() => {}).finally(resolve);
+      }, { once: true });
+      img.addEventListener('error', resolve, { once: true });
+    });
+  });
+  Promise.all(decodePromises).then(() => {
+    // GPU warm-up: briefly render all arms at near-zero opacity offscreen.
+    // This forces the browser to push pixels to GPU and compute drop-shadow
+    // for every arm BEFORE the user clicks. Eliminates the "dark pause" on
+    // first animation by making sure F4 is GPU-warm before being shown.
+    const restPos = -10000;  // far offscreen, guaranteed not visible
+    const initialDims = getArmDimensions();
+    allImageElements.forEach(img => {
+      img.style.left = restPos + 'px';
+      img.style.top = '0px';
+      img.style.opacity = '0.001';
+      img.style.width = initialDims.width + 'px';
+      img.style.height = initialDims.height + 'px';
+    });
+    // Force one render frame, then reset to fully hidden
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        allImageElements.forEach(img => {
+          img.style.opacity = '0';
+        });
+        assetsReady = true;
+      });
+    });
+  });
+
+  // Animation timing — locked-in optimal values from test.html
+  const HOLD_TIME = 500;             // ms the closed hand stays visible
+  const HAND_WIDTH_PX = 100;         // visible hand width in pixels
+  const ARM_SLIDE_DURATION = 950;    // ms for the retreat slide, and for patrons mode (no ball to sync with)
+  const MIN_ARM_SLIDE = 260;         // ms floor for the ball-catch slide-in, so a close shot doesn't teleport
+  const ARM_ARRIVAL_LEAD = 150;      // ms arm should be in position BEFORE the ball lands
+  const FADE_DURATION = 0;           // ms cross-fade duration (0 = instant snap)
+
+  // Image aspect ratio (all frames are 5:1 panoramic, e.g. 2320×464)
+  // Native dimensions don't matter for the math — only the 5:1 aspect ratio does.
+  const IMG_W = 2320;
+  const IMG_H = 464;
+  const IMG_ASPECT = IMG_W / IMG_H;
+  const HAND_FRACTION_OF_IMG = 0.12;
+  const CATCH_REL_X = 0.06;
+  const CATCH_REL_Y = 0.50;
+
+  let lastArmIndex = -1;
+  let armBusy = false;
+
+  function pickArm() {
+    let idx;
+    do {
+      idx = Math.floor(Math.random() * ARM_SET.length);
+    } while (idx === lastArmIndex && ARM_SET.length > 1);
+    lastArmIndex = idx;
+    return ARM_SET[idx];
+  }
+
+  // Determine which sides ball and arm come from based on click position
+  // - Click on LEFT half → ball from RIGHT, arm from LEFT
+  // - Click on RIGHT half → ball from LEFT, arm from RIGHT
+  function determineSides(clickX) {
+    if (clickX < W / 2) {
+      return { ballSide: 'right', armSide: 'left' };
+    } else {
+      return { ballSide: 'left', armSide: 'right' };
+    }
+  }
+
+  function getArmDimensions() {
+    // Scale the arm proportionally with viewport so the arm's tail end is
+    // always offscreen, regardless of zoom level. The hand grows along with
+    // the arm — this looks natural since when the user zooms out, everything
+    // gets smaller, so a proportionally-bigger arm helps maintain visual presence.
+    //
+    // At default desktop viewport (~1400px), arm is ~833px wide (the original).
+    // At zoomed-out viewport (~2000px effective), arm scales to ~1180px.
+    const MIN_TOTAL_WIDTH = HAND_WIDTH_PX / HAND_FRACTION_OF_IMG;  // 833px baseline
+    const REFERENCE_VIEWPORT = 1400;  // The viewport this baseline was designed for
+    const scale = Math.max(1, window.innerWidth / REFERENCE_VIEWPORT);
+    const totalWidth = MIN_TOTAL_WIDTH * scale;
+    const totalHeight = totalWidth / IMG_ASPECT;
+    return { width: totalWidth, height: totalHeight };
+  }
+
+  // ---------- Arm sequence: 2-frame system (F2 open hand → F4 closed with ball) ----------
+  let armState = null;
+
+  function startArmSlide(targetX, targetY, armSide, arm, slideDuration = ARM_SLIDE_DURATION) {
+    const f2 = arm.f2El;
+    const f4 = arm.f4El;
+    const { width, height } = getArmDimensions();
+
+    let armTargetLeft, armRestLeft, flipTransform;
+
+    if (armSide === 'left') {
+      // Arm enters from LEFT: flip horizontally so hand points right (toward catch)
+      flipTransform = 'scaleX(-1)';
+      armTargetLeft = targetX - width * (1 - CATCH_REL_X);
+      armRestLeft = -width - 40;
+    } else {
+      // Arm enters from RIGHT: natural orientation, hand on left of image
+      flipTransform = 'none';
+      armTargetLeft = targetX - width * CATCH_REL_X;
+      armRestLeft = window.innerWidth + 40;
+    }
+
+    // armTop is stored in DOCUMENT coordinates (so the arm stays locked to the page).
+    // For position: fixed elements, we render at viewport-Y = armTopDoc - scrollY.
+    const armTopDoc = targetY - height * CATCH_REL_Y;
+    armState = { f2, f4, armTargetLeft, armRestLeft, flipTransform, armTopDoc };
+
+    // Defensive cleanup: hide all arms before showing this one
+    ARM_SET.forEach(a => {
+      a.f2El.classList.remove('is-active');
+      a.f4El.classList.remove('is-active');
+      a.f2El.style.opacity = '0';
+      a.f4El.style.opacity = '0';
+    });
+
+    const initialArmTop = armTopDoc - window.scrollY;
+    [f2, f4].forEach(el => {
+      el.style.transition = 'none';
+      el.style.left = armRestLeft + 'px';
+      el.style.top = initialArmTop + 'px';
+      el.style.transform = flipTransform;
+      el.style.width = width + 'px';
+      el.style.height = height + 'px';
+      el.style.opacity = '0';
+    });
+
+    f2.classList.add('is-active');
+    f2.style.opacity = '1';
+    void f2.offsetWidth;
+
+    [f2, f4].forEach(el => {
+      el.style.transition = `left ${slideDuration}ms cubic-bezier(0.34, 1.15, 0.64, 1), opacity ${FADE_DURATION}ms linear`;
+      el.style.left = armTargetLeft + 'px';
+    });
+  }
+
+  function triggerCatchAndHold() {
+    if (!armState) return;
+    const { f2, f4, armRestLeft } = armState;
+
+    // Hide ball — it's been "caught"
+    hideBall();
+
+    // Hard-snap from open hand (F2) to closed hand with ball (F4)
+    f2.style.opacity = '0';
+    f4.style.opacity = '1';
+
+    // After hold, retreat the way it came
+    setTimeout(() => {
+      f4.style.transition = `left ${ARM_SLIDE_DURATION + 100}ms cubic-bezier(0.4, 0, 0.6, 1), opacity ${FADE_DURATION}ms linear`;
+      f4.style.left = armRestLeft + 'px';
+    }, HOLD_TIME);
+
+    // Cleanup
+    setTimeout(() => {
+      f2.classList.remove('is-active');
+      f4.classList.remove('is-active');
+      f2.style.opacity = '0';
+      f4.style.opacity = '0';
+      armState = null;
+      armBusy = false;
+    }, HOLD_TIME + ARM_SLIDE_DURATION + 200);
+  }
+
+  // Spawn the ball at a screen edge based on the side
+  // and fire it toward the target
+  function fireBall(targetX, targetY, ballSide, hitElement) {
+    if (ball.flying) return 0;
+
+    // Spawn position: just offscreen on the chosen side, at a randomized vertical position
+    // that creates a natural arc toward the target
+    let startX, startY;
+    if (ballSide === 'left') {
+      startX = -20;
+      startY = targetY + (Math.random() - 0.5) * 200; // randomize within ±100px of target Y
+    } else {
+      // ballSide === 'right'
+      startX = W + 20;
+      startY = targetY + (Math.random() - 0.5) * 200;
+    }
+
+    // Clamp startY within reasonable bounds
+    startY = Math.max(40, Math.min(H - 40, startY));
+
+    ball.x = startX;
+    ball.y = startY;
+    ball.visible = true;
+    ball.flying = true;
+    ball.targetX = targetX;
+    ball.targetY = targetY;
+    ball.flightFrames = 0;
+    ball.targetEl = hitElement;
+
+    // Calculate velocity to reach target with parabolic arc
+    const dx = targetX - startX;
+    const dy = targetY - startY;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    const T = Math.max(16, Math.min(38, dist / 22));
+    ball.vx = dx / T;
+    ball.vy = (dy - 0.5 * GRAVITY_FLY * T * T) / T;
+    ball.maxFlightFrames = T * 1.4;
+    ball.rotSpeed = ball.vx * 0.04;
+
+    // Approximate flight time in ms — used only to size/schedule the arm's
+    // slide-in below. The actual catch moment is decided by update(), which
+    // watches the ball's real position, so this estimate no longer has to be
+    // frame-perfect.
+    return (T / 60) * 1000;
+  }
+
+  function hideBall() {
+    ball.visible = false;
+    ball.flying = false;
+  }
+
+  // ---------- Click handler ----------
+  document.addEventListener('click', (e) => {
+    if (!assetsReady) return;
+    if (ball.flying || armBusy) return;
+
+    // viewport coordinates — used for hit-testing and side detection (which are viewport-relative)
+    const vx = e.clientX;
+    const vy = e.clientY;
+
+    // document coordinates — used for animation target (so arm/ball stay locked to page on scroll)
+    const tx = e.pageX;
+    const ty = e.pageY;
+
+    const hit = checkTargetHit(vx, vy);
+    const sides = determineSides(vx);
+
+    // If user clicked a target that's also a link (has data-href), prevent the
+    // default <a> navigation. The ball-hit will navigate via triggerHit instead,
+    // letting the animation play first.
+    if (hit && hit.getAttribute('data-href')) {
+      e.preventDefault();
+    }
+
+    // ===== PATRONS MODE: only arm slides in, no ball =====
+    if (window.CBS_PATRONS_MODE) {
+      armBusy = true;
+      const arm = pickArm();
+      // Slide arm in immediately. Use a "target" position near the click so
+      // the arm rests at a natural location.
+      startArmSlide(tx, ty, sides.armSide, arm);
+      // Trigger hit on the clicked element (for navigation links)
+      if (hit) {
+        setTimeout(() => triggerHit(hit), ARM_SLIDE_DURATION);
+      }
+      // After hold, retract arm
+      setTimeout(() => triggerCatchAndHold(), ARM_SLIDE_DURATION + 100);
+      return;
+    }
+
+    // ===== NORMAL MODE: ball + arm =====
+    // Fire ball from one side. We pass document-Y so the ball lands at the correct
+    // page position regardless of scroll, then drawBall() converts to viewport on render.
+    const ballFlightMs = fireBall(tx, ty, sides.ballSide, hit);
+
+    // If clicking empty space (not a target), launch the arm from the opposite side.
+    // Arms are only enabled on certain pages (set via window.CBS_ARMS_ENABLED).
+    if (!hit && window.CBS_ARMS_ENABLED) {
+      armBusy = true;
+      const arm = pickArm();
+
+      // The arm starts sliding immediately and gets exactly as long as is
+      // actually available before the ball lands (minus its lead time) to
+      // finish the slide — instead of always taking the full ARM_SLIDE_DURATION,
+      // which is longer than most ball flights and left the arm still moving
+      // when the catch fired, so it never caught the ball in the right spot.
+      const armAvailableMs = Math.max(0, ballFlightMs - ARM_ARRIVAL_LEAD);
+      const slideDuration = Math.max(MIN_ARM_SLIDE, armAvailableMs);
+
+      startArmSlide(tx, ty, sides.armSide, arm, slideDuration);
+      // The catch itself (hand closes, ball disappears) fires from update()
+      // below, in the same frame the ball actually reaches the target —
+      // not from a timer here — so the two can't drift apart.
+    }
+  });
+
+  function drawBall() {
+    if (!ball.visible) return;
+    ctx.save();
+
+    // Convert document coords to viewport for canvas drawing
+    const viewportX = ball.x - window.scrollX;
+    const viewportY = ball.y - window.scrollY;
+    ctx.translate(viewportX, viewportY);
+    ctx.rotate(ball.rot);
+
+    // Flat ball fill — matches the ligne claire style of the arm illustrations.
+    // No radial gradient, just a single tennis-ball yellow-green.
+    ctx.beginPath();
+    ctx.arc(0, 0, RADIUS, 0, Math.PI * 2);
+    ctx.fillStyle = '#d4e054';
+    ctx.fill();
+
+    // Bold black outline — matches arm contour weight
+    ctx.lineWidth = 1.8;
+    ctx.strokeStyle = '#1a1f1a';
+    ctx.stroke();
+
+    // White seam — clipped INSIDE the ball circle so it never extends past edge.
+    // Without clipping, the curved seam arcs at radius 1.15 create a white halo
+    // outside the ball outline.
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(0, 0, RADIUS - 0.5, 0, Math.PI * 2);
+    ctx.clip();
+
+    ctx.lineWidth = 1.6;
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.arc(0, -RADIUS * 0.35, RADIUS * 1.15, Math.PI * 0.18, Math.PI * 0.82);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(0, RADIUS * 0.35, RADIUS * 1.15, Math.PI * 1.18, Math.PI * 1.82);
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.restore();
+  }
+
+  function drawImpacts() {
+    // Impacts and particles are also stored in DOCUMENT coordinates
+    // (because they spawn at ball position). Convert to viewport on render.
+    const sx = window.scrollX;
+    const sy = window.scrollY;
+    for (let i = impacts.length - 1; i >= 0; i--) {
+      const imp = impacts[i];
+      ctx.beginPath();
+      ctx.arc(imp.x - sx, imp.y - sy, imp.r, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(26,31,26,${imp.life * 0.6})`;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      imp.r += 2.5;
+      imp.life -= 0.045;
+      if (imp.life <= 0) impacts.splice(i, 1);
+    }
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      ctx.beginPath();
+      ctx.arc(p.x - sx, p.y - sy, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(120,90,50,${(p.life * 0.7).toFixed(2)})`;
+      ctx.fill();
+      p.x += p.vx; p.y += p.vy;
+      p.vy += 0.2;
+      p.vx *= 0.96;
+      p.life -= 0.022;
+      if (p.life <= 0) particles.splice(i, 1);
+    }
+  }
+
+  function update() {
+    if (!ball.flying || !ball.visible) return;
+    ball.x += ball.vx;
+    ball.y += ball.vy;
+    ball.vy += GRAVITY_FLY;
+    ball.rot += ball.rotSpeed;
+    ball.flightFrames++;
+
+    const dxToTarget = ball.targetX - ball.x;
+    const dyToTarget = ball.targetY - ball.y;
+    const distToTarget = Math.sqrt(dxToTarget * dxToTarget + dyToTarget * dyToTarget);
+    const reachedTarget = distToTarget < RADIUS + 4 || ball.flightFrames >= ball.maxFlightFrames;
+
+    if (reachedTarget) {
+      ball.x = ball.targetX;
+      ball.y = ball.targetY;
+      spawnImpact(ball.x, ball.y);
+
+      if (ball.targetEl) {
+        triggerHit(ball.targetEl);
+      } else if (armBusy) {
+        // No UI target: this flight was meant to be caught by the arm.
+        // Close the hand right now, at the exact moment the ball lands.
+        triggerCatchAndHold();
+      }
+      // Hide the ball — either it was caught by the arm or it hit a target
+      hideBall();
+    }
+  }
+
+  // Update arm top position to follow document scroll while animation is active
+  function updateArmScrollPosition() {
+    if (!armState) return;
+    const viewportTop = armState.armTopDoc - window.scrollY;
+    const topPx = viewportTop + 'px';
+    if (armState.f2.style.top !== topPx) armState.f2.style.top = topPx;
+    if (armState.f4.style.top !== topPx) armState.f4.style.top = topPx;
+  }
+
+  // Track if anything visible needs animation (ball flying, arm visible, impacts/particles active)
+  function isAnimationActive() {
+    return ball.flying || ball.visible || armBusy || impacts.length > 0 || particles.length > 0;
+  }
+
+  function loop() {
+    // Only do canvas work if something is happening — saves CPU when idle
+    if (isAnimationActive()) {
+      ctx.clearRect(0, 0, W, H);
+      update();
+      drawImpacts();
+      drawBall();
+    }
+    updateArmScrollPosition();
+    requestAnimationFrame(loop);
+  }
+  loop();
+  } // end init()
+})();
+</script>
+
+</body>
+</html>
