@@ -1299,46 +1299,41 @@ body.page-apply nav.cbs-nav {
   });
 
   // Preload all arm images so the first click is smooth.
-  // Each arm becomes usable independently as soon as its own two frames are
-  // decoded — we don't make every arm wait for the slowest one. That way the
-  // very first click can already show a catch (using whichever arm happened
-  // to finish first) instead of doing nothing until ALL arms have loaded.
-  ARM_SET.forEach(arm => {
-    arm.ready = false;
-    const armImages = [arm.f2El, arm.f4El];
-    const decodePromises = armImages.map(img => {
-      if (img.complete && img.naturalWidth > 0) {
-        return img.decode().catch(() => {});
-      }
-      return new Promise(resolve => {
-        img.addEventListener('load', () => {
-          img.decode().catch(() => {}).finally(resolve);
-        }, { once: true });
-        img.addEventListener('error', resolve, { once: true });
-      });
+  // Block clicks (assetsReady = false) until every image is decoded.
+  let assetsReady = false;
+  const allImageElements = ARM_SET.flatMap(arm => [arm.f2El, arm.f4El]);
+  const decodePromises = allImageElements.map(img => {
+    if (img.complete && img.naturalWidth > 0) {
+      return img.decode().catch(() => {});
+    }
+    return new Promise(resolve => {
+      img.addEventListener('load', () => {
+        img.decode().catch(() => {}).finally(resolve);
+      }, { once: true });
+      img.addEventListener('error', resolve, { once: true });
     });
-    Promise.all(decodePromises).then(() => {
-      // GPU warm-up: briefly render this arm at near-zero opacity offscreen.
-      // This forces the browser to push pixels to GPU and compute drop-shadow
-      // for this arm BEFORE the user clicks. Eliminates the "dark pause" on
-      // first animation by making sure F4 is GPU-warm before being shown.
-      const restPos = -10000;  // far offscreen, guaranteed not visible
-      const initialDims = getArmDimensions();
-      armImages.forEach(img => {
-        img.style.left = restPos + 'px';
-        img.style.top = '0px';
-        img.style.opacity = '0.001';
-        img.style.width = initialDims.width + 'px';
-        img.style.height = initialDims.height + 'px';
-      });
-      // Force one render frame, then reset to fully hidden
+  });
+  Promise.all(decodePromises).then(() => {
+    // GPU warm-up: briefly render all arms at near-zero opacity offscreen.
+    // This forces the browser to push pixels to GPU and compute drop-shadow
+    // for every arm BEFORE the user clicks. Eliminates the "dark pause" on
+    // first animation by making sure F4 is GPU-warm before being shown.
+    const restPos = -10000;  // far offscreen, guaranteed not visible
+    const initialDims = getArmDimensions();
+    allImageElements.forEach(img => {
+      img.style.left = restPos + 'px';
+      img.style.top = '0px';
+      img.style.opacity = '0.001';
+      img.style.width = initialDims.width + 'px';
+      img.style.height = initialDims.height + 'px';
+    });
+    // Force one render frame, then reset to fully hidden
+    requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          armImages.forEach(img => {
-            img.style.opacity = '0';
-          });
-          arm.ready = true;
+        allImageElements.forEach(img => {
+          img.style.opacity = '0';
         });
+        assetsReady = true;
       });
     });
   });
@@ -1370,22 +1365,6 @@ body.page-apply nav.cbs-nav {
     } while (idx === lastArmIndex && ARM_SET.length > 1);
     lastArmIndex = idx;
     return ARM_SET[idx];
-  }
-
-  // Only pick among arms whose images have actually finished loading —
-  // returns null if none are ready yet (e.g. an instant click on a cold
-  // cache), so the caller can skip the arm and let the rest of the
-  // interaction (ball flight, navigation) carry on unaffected.
-  function pickReadyArm() {
-    const ready = ARM_SET.filter(a => a.ready);
-    if (ready.length === 0) return null;
-    let idx;
-    do {
-      idx = Math.floor(Math.random() * ready.length);
-    } while (ARM_SET.indexOf(ready[idx]) === lastArmIndex && ready.length > 1);
-    const arm = ready[idx];
-    lastArmIndex = ARM_SET.indexOf(arm);
-    return arm;
   }
 
   // Determine which sides ball and arm come from based on click position
@@ -1552,6 +1531,7 @@ body.page-apply nav.cbs-nav {
 
   // ---------- Click handler ----------
   document.addEventListener('click', (e) => {
+    if (!assetsReady) return;
     if (ball.flying || armBusy) return;
 
     // viewport coordinates — used for hit-testing and side detection (which are viewport-relative)
@@ -1565,19 +1545,17 @@ body.page-apply nav.cbs-nav {
     const hit = checkTargetHit(vx, vy);
     const sides = determineSides(vx);
 
+    // If user clicked a target that's also a link (has data-href), prevent the
+    // default <a> navigation. The ball-hit will navigate via triggerHit instead,
+    // letting the animation play first.
+    if (hit && hit.getAttribute('data-href')) {
+      e.preventDefault();
+    }
+
     // ===== PATRONS MODE: only arm slides in, no ball =====
     if (window.CBS_PATRONS_MODE) {
-      // No ball in this mode — if the arm image isn't ready yet, there's
-      // nothing to animate, so let the link navigate normally instead of
-      // preventing default with no animation to show for it.
-      const arm = pickReadyArm();
-      if (!arm) return;
-
-      if (hit && hit.getAttribute('data-href')) {
-        e.preventDefault();
-      }
-
       armBusy = true;
+      const arm = pickArm();
       // Slide arm in immediately. Use a "target" position near the click so
       // the arm rests at a natural location.
       startArmSlide(tx, ty, sides.armSide, arm);
@@ -1591,15 +1569,6 @@ body.page-apply nav.cbs-nav {
     }
 
     // ===== NORMAL MODE: ball + arm =====
-    // If user clicked a target that's also a link (has data-href), prevent the
-    // default <a> navigation. The ball-hit will navigate via triggerHit instead,
-    // letting the animation play first. The ball itself never depends on the
-    // arm images, so this always plays — even on the very first click, before
-    // any arm has finished loading.
-    if (hit && hit.getAttribute('data-href')) {
-      e.preventDefault();
-    }
-
     // Fire ball from one side. We pass document-Y so the ball lands at the correct
     // page position regardless of scroll, then drawBall() converts to viewport on render.
     const ballFlightMs = fireBall(tx, ty, sides.ballSide, hit);
@@ -1607,25 +1576,21 @@ body.page-apply nav.cbs-nav {
     // If clicking empty space (not a target), launch the arm from the opposite side.
     // Arms are only enabled on certain pages (set via window.CBS_ARMS_ENABLED).
     if (!hit && window.CBS_ARMS_ENABLED) {
-      const arm = pickReadyArm();
-      // No arm ready yet (cold cache, first click) — the ball still flies
-      // and lands normally, it just won't be caught this one time.
-      if (arm) {
-        armBusy = true;
+      armBusy = true;
+      const arm = pickArm();
 
-        // The arm starts sliding immediately and gets exactly as long as is
-        // actually available before the ball lands (minus its lead time) to
-        // finish the slide — instead of always taking the full ARM_SLIDE_DURATION,
-        // which is longer than most ball flights and left the arm still moving
-        // when the catch fired, so it never caught the ball in the right spot.
-        const armAvailableMs = Math.max(0, ballFlightMs - ARM_ARRIVAL_LEAD);
-        const slideDuration = Math.max(MIN_ARM_SLIDE, armAvailableMs);
+      // The arm starts sliding immediately and gets exactly as long as is
+      // actually available before the ball lands (minus its lead time) to
+      // finish the slide — instead of always taking the full ARM_SLIDE_DURATION,
+      // which is longer than most ball flights and left the arm still moving
+      // when the catch fired, so it never caught the ball in the right spot.
+      const armAvailableMs = Math.max(0, ballFlightMs - ARM_ARRIVAL_LEAD);
+      const slideDuration = Math.max(MIN_ARM_SLIDE, armAvailableMs);
 
-        startArmSlide(tx, ty, sides.armSide, arm, slideDuration);
-        // The catch itself (hand closes, ball disappears) fires from update()
-        // below, in the same frame the ball actually reaches the target —
-        // not from a timer here — so the two can't drift apart.
-      }
+      startArmSlide(tx, ty, sides.armSide, arm, slideDuration);
+      // The catch itself (hand closes, ball disappears) fires from update()
+      // below, in the same frame the ball actually reaches the target —
+      // not from a timer here — so the two can't drift apart.
     }
   });
 
