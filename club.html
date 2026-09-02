@@ -1234,6 +1234,10 @@ body.page-apply nav.cbs-nav {
 @media (max-width: 900px) {
   .club-grid { grid-template-columns: 1fr; gap: 40px; }
   .club-carousel-image { height: 180px; }
+  /* Smaller images on mobile means less distance to travel over the same
+     48s, so the same loop feels twice as slow as on desktop — halve the
+     duration here to get the same felt speed. */
+  .club-carousel-track { animation-duration: 24s; }
 }
 </style>
 <footer class="footer">
