@@ -1007,6 +1007,7 @@ body.page-apply nav.cbs-nav {
     <a href="club.html" class="cbs-nav-link">Club</a>
     <a href="patrons.html" class="cbs-nav-link">Patrons</a>
     <a href="apply.html" class="cbs-nav-link is-current">Apply</a>
+    <a href="community.html" class="cbs-nav-link">Community</a>
     <a href="contact.html" class="cbs-nav-link">Contact</a>
   </div>
   <button class="cbs-nav-toggle" aria-label="Open menu" aria-expanded="false">
@@ -1050,6 +1051,27 @@ body.page-apply nav.cbs-nav {
 
   <section class="page-body-section">
     <div class="page-body-inner" style="max-width: 700px;">
+      <!--
+        ================================================================
+        APPLICATIONS OPEN/CLOSED SWITCH
+        Flip the line below to false to take the form down between
+        semesters and show a styled "not open yet" message instead —
+        no HTML to comment in/out, just this one boolean.
+
+        This only controls what THIS PAGE displays. It does NOT stop
+        someone from submitting the Tally form directly if they have
+        the raw tally.so link. To actually block submissions, also
+        toggle "Accept responses" off in the Tally dashboard (form
+        settings) — use both together when applications are closed.
+        ================================================================
+      -->
+      <script>window.CBS_APPLICATIONS_OPEN = true;</script>
+
+      <div class="apply-closed-notice" style="display: none;">
+        <p class="page-lede" style="margin-bottom: 24px;">Applications aren't open yet. They open at the start of each semester — follow <a href="https://instagram.com/cbs_tennis" target="_blank" rel="noopener" style="color: inherit;">@cbs_tennis</a> to know the moment they do.</p>
+        <p class="page-lede">Tennis doesn't have to wait, though — <a href="community.html" data-cbs-target data-href="community.html" style="color: inherit;">join the CBS Tennis Community</a> to find a hitting partner in the meantime.</p>
+      </div>
+
       <iframe
         class="tally-form-frame"
         data-tally-src="https://tally.so/embed/81bxvz?alignLeft=1&hideTitle=1&dynamicHeight=1"
@@ -1061,16 +1083,21 @@ body.page-apply nav.cbs-nav {
         title="CBS Tennis membership application"
       ></iframe>
       <script>
-      var d=document,w="https://tally.so/widgets/embed.js",v=function(){
-        "undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach(function(e){e.src=e.dataset.tallySrc});
-      };
-      if("undefined"!=typeof Tally)v();
-      else if(d.querySelector('script[src="'+w+'"]')==null){
-        var s=d.createElement("script");
-        s.src=w;
-        s.onload=v;
-        s.onerror=v;
-        d.body.appendChild(s);
+      if (!window.CBS_APPLICATIONS_OPEN) {
+        document.querySelector('.apply-closed-notice').style.display = 'block';
+        document.querySelector('.tally-form-frame').style.display = 'none';
+      } else {
+        var d=document,w="https://tally.so/widgets/embed.js",v=function(){
+          "undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach(function(e){e.src=e.dataset.tallySrc});
+        };
+        if("undefined"!=typeof Tally)v();
+        else if(d.querySelector('script[src="'+w+'"]')==null){
+          var s=d.createElement("script");
+          s.src=w;
+          s.onload=v;
+          s.onerror=v;
+          d.body.appendChild(s);
+        }
       }
       </script>
     </div>
@@ -1088,6 +1115,7 @@ body.page-apply nav.cbs-nav {
         <li><a href="club.html" data-cbs-target data-href="club.html">Inside the club</a></li>
         <li><a href="patrons.html" data-cbs-target data-href="patrons.html">Patrons</a></li>
         <li><a href="apply.html" data-cbs-target data-href="apply.html">Apply</a></li>
+        <li><a href="community.html" data-cbs-target data-href="community.html">Community</a></li>
         <li><a href="contact.html" data-cbs-target data-href="contact.html">Contact</a></li>
       </ul>
     </div>
