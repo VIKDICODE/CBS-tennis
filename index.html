@@ -218,32 +218,6 @@ h1.hero-headline em {
   flex-wrap: wrap;
 }
 
-.hero-secondary {
-  margin-top: 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.hero-secondary-link {
-  font-family: var(--font-sans);
-  font-size: 11px;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--cream-warm);
-  text-decoration: none;
-  border-bottom: 1px solid rgba(251, 242, 220, 0.4);
-  padding-bottom: 2px;
-  width: fit-content;
-  transition: border-color 0.3s ease;
-}
-.hero-secondary-link:hover { border-color: var(--cream-warm); }
-.hero-secondary-text {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 14px;
-  opacity: 0.7;
-}
-
 .cbs-btn {
   position: relative;
   background: var(--cream-warm);
@@ -447,6 +421,82 @@ h1.hero-headline em {
   font-style: italic;
   font-weight: 400;
 }
+
+/* ---------- Home paths (Club vs Community) ---------- */
+/* Deliberately its own section, not tucked under the hero's "Join the
+   club" button — the two used to sit stacked in the hero (button + a
+   smaller link right under it), which read as "two variants of the
+   same action" instead of two separate things. Equal-weight cards,
+   different verbs, colors borrowed from each destination's own page
+   (apply.html's aubergine / community.html's ink+ball-yellow) so the
+   distinction is visible before anyone reads a word. */
+.home-paths {
+  background: var(--cream);
+  color: var(--ink);
+  padding: 100px 56px;
+}
+.home-paths-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.home-paths-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  text-align: center;
+  margin-bottom: 48px;
+}
+.home-paths-eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 32px;
+  height: 1px;
+  background: currentColor;
+  vertical-align: middle;
+  margin-right: 14px;
+  opacity: 0.6;
+}
+.home-paths-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.home-path-card {
+  padding: 48px 40px;
+  color: var(--cream-warm);
+}
+.home-path-card--club { background: #4a2456; }
+.home-path-card--community { background: var(--ink); }
+.home-path-label {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 28px;
+  margin-bottom: 18px;
+}
+.home-path-card--community .home-path-label { color: var(--ball); }
+.home-path-text {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  line-height: 1.5;
+  opacity: 0.85;
+  margin-bottom: 28px;
+}
+.home-path-cta {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--cream-warm);
+  text-decoration: none;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--cream-warm);
+  transition: opacity 0.3s ease;
+}
+.home-path-cta:hover { opacity: 0.7; }
 
 /* ---------- Home patrons strip (dark grass) ---------- */
 .home-patrons {
@@ -757,6 +807,8 @@ h2.patrons-headline em { font-style: italic; font-weight: 500; }
   .stats-band-inner { grid-template-columns: 1fr; gap: 32px; }
   .stats-band-inner::before, .stats-band-inner::after { display: none; }
   .stat-num { font-size: 64px; }
+  .home-paths { padding: 60px 24px; }
+  .home-paths-grid { grid-template-columns: 1fr; }
   .patrons { padding: 80px 24px; }
   .patrons-grid { grid-template-columns: repeat(2, 1fr); }
   .footer { padding: 60px 24px 24px; }
@@ -1080,10 +1132,6 @@ body.page-apply nav.cbs-nav {
       <div class="hero-meta fade-up d3">
         <a href="apply.html" class="cbs-btn" data-cbs-target data-href="apply.html">Join the club →</a>
       </div>
-      <div class="hero-secondary fade-up d4">
-        <a href="community.html" class="hero-secondary-link" data-cbs-target data-href="community.html">Join the CBS Tennis Community →</a>
-        <span class="hero-secondary-text">Meet other CBS students who want to play, no application needed.</span>
-      </div>
     </div>
   </div>
 </section>
@@ -1109,6 +1157,24 @@ body.page-apply nav.cbs-nav {
   <div class="home-tagline-inner">
     <div class="home-tagline-eyebrow in-view">The premise</div>
     <p class="home-tagline-text in-view">About 50 of us, playing Sundays around Copenhagen. No pressure, just tennis and good company.</p>
+  </div>
+</section>
+
+<section class="home-paths">
+  <div class="home-paths-inner">
+    <div class="home-paths-eyebrow in-view">Two ways to play</div>
+    <div class="home-paths-grid">
+      <div class="home-path-card home-path-card--club in-view">
+        <div class="home-path-label">The Club</div>
+        <p class="home-path-text">~50 members, picked each semester. Real team, real commitment.</p>
+        <a href="apply.html" class="home-path-cta" data-cbs-target data-href="apply.html">Apply →</a>
+      </div>
+      <div class="home-path-card home-path-card--community in-view">
+        <div class="home-path-label">The Community</div>
+        <p class="home-path-text">An open WhatsApp group for any CBS student. No application — just tennis.</p>
+        <a href="community.html" class="home-path-cta" data-cbs-target data-href="community.html">Join the group →</a>
+      </div>
+    </div>
   </div>
 </section>
 
