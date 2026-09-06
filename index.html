@@ -218,6 +218,32 @@ h1.hero-headline em {
   flex-wrap: wrap;
 }
 
+.hero-secondary {
+  margin-top: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.hero-secondary-link {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--cream-warm);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(251, 242, 220, 0.4);
+  padding-bottom: 2px;
+  width: fit-content;
+  transition: border-color 0.3s ease;
+}
+.hero-secondary-link:hover { border-color: var(--cream-warm); }
+.hero-secondary-text {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 14px;
+  opacity: 0.7;
+}
+
 .cbs-btn {
   position: relative;
   background: var(--cream-warm);
@@ -1131,6 +1157,10 @@ body.page-apply nav.cbs-nav {
       </h1>
       <div class="hero-meta fade-up d3">
         <a href="apply.html" class="cbs-btn" data-cbs-target data-href="apply.html">Join the club →</a>
+      </div>
+      <div class="hero-secondary fade-up d4">
+        <a href="community.html" class="hero-secondary-link" data-cbs-target data-href="community.html">Join the CBS Tennis Community →</a>
+        <span class="hero-secondary-text">Meet other CBS students who want to play, no application needed.</span>
       </div>
     </div>
   </div>
